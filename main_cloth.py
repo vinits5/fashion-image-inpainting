@@ -188,12 +188,15 @@ if __name__ == '__main__':
             d_scheduler.step(e)
             if e%2 == 0:
                 torch.save(refine_net.state_dict(), os.path.join(os.getcwd(), exp_name, 'weights', "weights_net_epoch_{}.pth".format(e)))
+                torch.save(d_net.state_dict(), os.path.join(os.getcwd(), exp_name, 'weights', "weights_net_epoch_disc_{}.pth".format(e)))
                 if e == 0:
                     cmd = f"gsutil -m cp -r {exp_name}/ {save_path}/"
                     os.system(cmd)
                 else:
                     try:
                         cmd = f"gsutil -m cp -r {exp_name}/weights/weights_net_epoch_{e}.pth {save_path}/{exp_name}/weights/"
+                        os.system(cmd)
+                        cmd = f"gsutil -m cp -r {exp_name}/weights/weights_net_epoch_disc_{e}.pth {save_path}/{exp_name}/weights/"
                         os.system(cmd)
                     except:
                         print("Error in storing weights!")
