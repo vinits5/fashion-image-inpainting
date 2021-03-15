@@ -122,6 +122,7 @@ def train(epoch):
         x_mask = torch.tensor(x_mask).float().to(device)
         x_mask = torch.cat([x_mask, x_mask, x_mask], dim=-1)
         x_mask = x_mask.permute(0, 3, 1, 2)
+        x_mask = 1.0 - x_mask
 
         y_train = torch.tensor(person_cloth.numpy()).float().to(device)
         y_train = y_train.permute(0, 3, 1, 2)
@@ -131,7 +132,7 @@ def train(epoch):
         refine_net.zero_grad()
         r_output = refine_net(x_train, x_mask)
         d_output = d_net(r_output.detach()).view(-1)
-        r_composite = x_mask * r_output + (1.0 - x_mask) * y_train
+        r_composite = x_mask * y_train + (1.0 - x_mask) * r_output
 
         vgg_features_gt = vgg(y_train)
         vgg_features_composite = vgg(r_composite)
