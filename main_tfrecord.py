@@ -24,7 +24,7 @@ from losses import CustomLoss
 
 NUM_EPOCHS = 21
 save_path = "gs://vinit_helper/cloth_inpainting_gan/cloth_inpainting_eccv20_aim"
-exp_name = 'exp_mask_like_paper'
+exp_name = 'exp_tfrecords_small_inpaint_region'
 
 MODE = "train"
 MASK_FORM = "free"  # "free"
@@ -78,7 +78,7 @@ r_scheduler = optim.lr_scheduler.ExponentialLR(r_optimizer, gamma=0.9)
 if MODE != "ablation":
     writer = SummaryWriter()
 
-from dataset_cloth import define_dataset
+from dataset_tfrecord import define_dataset
 tfrecord_path = "/content/generator_layers_v1.record"
 batch_size = 8
 trainset, trainset_length = define_dataset(tfrecord_path, batch_size, train=True)
